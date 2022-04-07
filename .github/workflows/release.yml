@@ -60,10 +60,11 @@ jobs:
           git config --local user.name "GitHub Action"
           conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md && git commit -m 'docs: Update changelog file'
           git tag $(getNewTag)
+          
       - name: Push changes on master
         uses: ad-m/github-push-action@master
         with:
-          branches: [master, alpha, dev, staging]
+          branch: master
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Push tags
@@ -73,10 +74,25 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           tags: true
 
+      - name: Merge into alpha
+        uses: devmasx/merge-branch@master
+        with:
+          type: now
+          target_branch: alpha
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+       -  name: Merge into dev
+        uses: devmasx/merge-branch@master
+        with:
+          type: now
+          target_branch: dev
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Create release
         run: |
           export CONVENTIONAL_GITHUB_RELEASER_TOKEN="${{ secrets.GITHUB_TOKEN }}"
           conventional-github-releaser -p angular
+
       - name: Create Pull Request
         uses: repo-sync/pull-request@v2
         with:
