@@ -33,7 +33,7 @@ jobs:
           type: now
           head_to_merge: production
           target_branch: alpha
-          github_token: ${{ github.token }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Merge production -> dev
         uses: devmasx/merge-branch@master
@@ -41,11 +41,13 @@ jobs:
           type: now
           head_to_merge: production
           target_branch: dev
-          github_token: ${{ github.token }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Merge production -> staging
         uses: devmasx/merge-branch@master
         with:
           type: now
           head_to_merge: production
           target_branch: staging
-          github_token: ${{ github.token }}   
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
