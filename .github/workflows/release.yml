@@ -60,11 +60,10 @@ jobs:
           git config --local user.name "GitHub Action"
           conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md && git commit -m 'docs: Update changelog file'
           git tag $(getNewTag)
-          
       - name: Push changes on master
         uses: ad-m/github-push-action@master
         with:
-          branch: master
+          branches: [master, alpha, dev, staging]
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Push tags
@@ -74,39 +73,10 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           tags: true
 
-    - name: Create Pull Request into Alpha
-        uses: repo-sync/pull-request@v2
-        with:
-          source_branch: "master"
-          destination_branch: "alpha"
-          pr_title: "Release $(git describe --tags `git rev-list --tags --max-count=1`)"
-          pr_body: ":crown: *Automated PR from release*"
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Create Pull Request into Dev
-        uses: repo-sync/pull-request@v2
-        with:
-          source_branch: "master"
-          destination_branch: "dev"
-          pr_title: "Release $(git describe --tags `git rev-list --tags --max-count=1`)"
-          pr_body: ":crown: *Automated PR from release*"
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Create Pull Request into Staging
-        uses: repo-sync/pull-request@v2
-        with:
-          source_branch: "master"
-          destination_branch: "staging"
-          pr_title: "Release $(git describe --tags `git rev-list --tags --max-count=1`)"
-          pr_body: ":crown: *Automated PR from release*"
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-
-
       - name: Create release
         run: |
           export CONVENTIONAL_GITHUB_RELEASER_TOKEN="${{ secrets.GITHUB_TOKEN }}"
           conventional-github-releaser -p angular
-
       - name: Create Pull Request
         uses: repo-sync/pull-request@v2
         with:
