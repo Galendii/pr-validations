@@ -31,21 +31,21 @@ jobs:
         uses: devmasx/merge-branch@master
         with:
           type: now
-          from_branch: production
+          head_to_merge: production
           target_branch: alpha
           github_token: ${{ github.token }}
 
-       - name: Merge production -> dev
+      - name: Merge production -> dev
         uses: devmasx/merge-branch@master
         with:
           type: now
-          from_branch: production
+          head_to_merge: production
           target_branch: dev
           github_token: ${{ github.token }}
-       - name: Merge production -> staging
+      - name: Merge production -> staging
         uses: devmasx/merge-branch@master
         with:
           type: now
-          from_branch: production
+          head_to_merge: production
           target_branch: staging
           github_token: ${{ github.token }}   
