@@ -1,4 +1,4 @@
-name: Create a production release
+name: Merge into backup branches
 
 on:
   pull_request:
