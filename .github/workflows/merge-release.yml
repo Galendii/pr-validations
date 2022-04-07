@@ -1,0 +1,51 @@
+name: Create a production release
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [production]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: master
+
+      - name: Fetch everything
+        run: |
+          git fetch --prune --unshallow
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Merge production -> alpha
+        uses: devmasx/merge-branch@master
+        with:
+          type: now
+          from_branch: production
+          target_branch: alpha
+          github_token: ${{ github.token }}
+
+       - name: Merge production -> dev
+        uses: devmasx/merge-branch@master
+        with:
+          type: now
+          from_branch: production
+          target_branch: dev
+          github_token: ${{ github.token }}
+       - name: Merge production -> staging
+        uses: devmasx/merge-branch@master
+        with:
+          type: now
+          from_branch: production
+          target_branch: staging
+          github_token: ${{ github.token }}   
