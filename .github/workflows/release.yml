@@ -63,7 +63,7 @@ jobs:
       - name: Push changes on master
         uses: ad-m/github-push-action@master
         with:
-          branches: [master, alpha, dev, staging]
+          branch: master
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Push tags
